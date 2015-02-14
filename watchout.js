@@ -1,5 +1,3 @@
-// start slingin' some d3 here.
-
 var Game = function(){
   var obj = {
     "numOfEnemies": 5,
@@ -11,7 +9,21 @@ var Game = function(){
   obj.initalize = function(){
     this.addEnemies();
     this.addPlayer();
-    intervalID = setInterval(this.gameTick.bind(this),1000)
+    d3.select(window)
+      .on('mousemove', function () {
+        console.log('dsafg');
+        d3.select('.hero')
+          .transition()
+          .delay(0)
+          .ease('linear')
+          .style({
+            'left': d3.event.pageX + 'px',
+            'top': d3.event.pageY + 'px'
+          });
+      }
+    );
+
+    intervalID = setInterval(this.gameTick.bind(this),950)
   }
 
   obj.getRandomWidth = function() {
@@ -27,7 +39,7 @@ var Game = function(){
   };
 
   obj.addPlayer = function() {
-    d3.selectAll(".hero")
+    d3.select("body").selectAll(".hero")
       .data(["hero"])
       .enter()
       .append('div')
@@ -46,10 +58,10 @@ var Game = function(){
       enemies[i] = i;
     }
 
-    d3.selectAll(".enemy")
+    d3.select("body").selectAll('.enemy')
       .data(enemies)
       .enter()
-      .append('div')
+      .insert('div')
       .attr('class', 'enemy')
       .style('left', function() {
 
@@ -73,6 +85,7 @@ var Game = function(){
 
   }
 
+  //returns new game element from Game().
   return obj;
 }
 
