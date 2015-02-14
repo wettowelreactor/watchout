@@ -19,6 +19,15 @@ Feel free to use it if you like. */
 
 }
 
+.pizza {background-image : url(pizza.gif);
+  height: 50px;
+  width: 50px;
+  background-size: 50px;
+  background-repeat: no-repeat;
+  position: fixed;
+}
+
+
 .flipped {
   -moz-transform: scaleX(-1);
   -o-transform: scaleX(-1);

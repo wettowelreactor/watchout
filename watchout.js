@@ -1,6 +1,6 @@
 var Game = function(){
   var obj = {
-    "numOfEnemies": 15,
+    "numOfEnemies": 1,
     "bestscore":0,
     "score": 0,
     "intervalID":null,
@@ -10,6 +10,7 @@ var Game = function(){
   obj.initalize = function(){
     this.addEnemies();
     this.addPlayer();
+    this.addPizza();
     d3.select(window)
       .on('mousemove', function () {
         d3.select('.hero')
@@ -87,6 +88,48 @@ var Game = function(){
       }.bind(obj));
   };
 
+  obj.addEnemy = function() {
+    var numEnemy = d3.selectAll('.enemy')[0].length
+
+    d3.selectAll('.enemy')
+      .data(d3.range(numEnemy+1))
+      .enter()
+      .insert("div")
+      .attr('class', 'enemy')
+      .style('left', function() {
+
+        return this.getRandomWidth() + "px";
+      }.bind(obj))
+      .style('top', function() {
+        return this.getRandomHeight() + "px";
+      }.bind(obj));
+  };
+
+  obj.addPizza = function(){
+    d3.select("body").selectAll(".pizza")
+      .data(["pizza"])
+      .enter()
+      .append('div')
+      .attr('class', 'pizza')
+      .style('left', function() {
+        return this.getRandomWidth() + "px";
+      }.bind(obj))
+      .style('top', function() {
+        return this.getRandomHeight() + "px";
+      }.bind(obj));
+
+  }
+
+  obj.movePizza = function(){
+    d3.select(".pizza")
+      .style('left', function() {
+        return this.getRandomWidth() + "px";
+      }.bind(obj))
+      .style('top', function() {
+        return this.getRandomHeight() + "px";
+      }.bind(obj));
+  }
+
   obj.getDistance = function(heroX, heroY, enemyX, enemyY) {
     var distanceX = heroX - enemyX;
     var distanceY = heroY - enemyY;
@@ -98,6 +141,8 @@ var Game = function(){
   obj.detectCollisions = function() {
     var hero = d3.select('.hero');
     var enemies = d3.selectAll('.enemy');
+    var pizza = d3.selectAll('.pizza');
+
     var that = this;
     enemies.each(function(){
       var enemy = d3.select(this);
@@ -105,7 +150,23 @@ var Game = function(){
         that.handlehit();
       }
     });
+    if(that.detectHit(hero,pizza)){
+      this.movePizza();
+      this.updateScore();
+      this.addEnemy();
+    }
   };
+
+
+
+  obj.updateScore = function(){
+    this.score++;
+    d3.select(".current").select("span").text(this.score);
+    if(this.score > this.bestscore){
+      this.bestscore = this.score
+      d3.select(".high").select("span").text(this.bestscore);
+    }
+  }
 
   obj.handlehitFactory = function(context){
     var lastTime = Date.now();
@@ -117,6 +178,7 @@ var Game = function(){
       } else {
         context.score = 0;
         context.collisions++;
+        d3.selectAll(".enemy").data([0]).exit().remove();
         d3.select(".current").select("span").text("0");
         d3.select(".collisions").select("span").text(context.collisions);
         lastTime = currentTime;
@@ -158,15 +220,6 @@ var Game = function(){
       .style('top', function() {
         return this.getRandomHeight() + "px";
       }.bind(obj));
-
-    this.score += 100;
-
-
-    d3.select(".current").select("span").text(this.score);
-    if(this.score > this.bestscore){
-      this.bestscore = this.score
-      d3.select(".high").select("span").text(this.bestscore);
-    }
   }
 
 
@@ -176,6 +229,13 @@ var Game = function(){
 
 window.game = Game();
 window.game.initalize();
+
+//Game starts if you hit spacebar
+//looks for click -- run init
+//do not run init twice
+//
+//
+
 
 
 
