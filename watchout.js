@@ -120,6 +120,12 @@ var Game = function(){
         d3.select(".current").select("span").text("0");
         d3.select(".collisions").select("span").text(context.collisions);
         lastTime = currentTime;
+        d3.select('html')
+          .transition()
+          .duration(50)
+          .style('background-image', "url('nightmare.png')")
+          .transition()
+          .style('background-image', "url('background.gif')")
       }
     }
 

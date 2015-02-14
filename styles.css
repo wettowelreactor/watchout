@@ -28,11 +28,10 @@ Feel free to use it if you like. */
   -ms-filter: "FlipH";
 }
 
-html, body {
+html{
   cursor: none;
   background-size: 100%;
-  background-image : url('background2.gif');
-
+  background-image : url(background.gif);
   z-index: -5001;
   font-family: 'Roboto Condensed', sans-serif;
   font-size:25px;
