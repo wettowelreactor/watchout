@@ -9,3 +9,11 @@ Feel free to use it if you like. */
   background-repeat: no-repeat;
   position: fixed;
 }
+
+.hero {background-image : url(hero.png);
+  height: 30px;
+  width: 30px;
+  background-size: 30px;
+  background-repeat: no-repeat;
+  position: fixed;
+}
