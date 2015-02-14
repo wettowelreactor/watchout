@@ -3,7 +3,8 @@ var Game = function(){
     "numOfEnemies": 5,
     "bestscore":0,
     "score": 0,
-    "intervalID":null
+    "intervalID":null,
+    "collisions":0
   };
 
   obj.initalize = function(){
@@ -21,6 +22,7 @@ var Game = function(){
           });
       }
     );
+    this.handlehit = this.handlehitFactory(this);
     intervalID = setInterval(this.gameTick.bind(this),950);
     d3.timer(this.detectCollisions.bind(this));
   }
@@ -86,10 +88,32 @@ var Game = function(){
     enemies.each(function(){
       var enemy = d3.select(this);
       if (that.detectHit.call(that, hero, enemy)) {
-        console.log('hit!');
+        that.handlehit();
       }
     });
   };
+
+  obj.handlehitFactory = function(context){
+    var lastTime = Date.now();
+    return function(){
+      var currentTime = Date.now();
+      if(currentTime - lastTime < 500){
+        console.log(currentTime - lastTime)
+        return;
+
+      } else {
+        context.score = 0;
+        context.collisions++;
+        console.log(context.score);
+        console.log(context.collisions);
+        d3.select(".current").select("span").text("0");
+        d3.select(".collisions").select("span").text(context.collisions);
+        lastTime = currentTime;
+      }
+    }
+
+  }
+
 
   obj.detectHit = function(hero, enemy) {
     var heroRadius = 15;
@@ -118,6 +142,14 @@ var Game = function(){
         return this.getRandomHeight() + "px";
       }.bind(obj));
 
+    this.score += 100;
+
+
+    d3.select(".current").select("span").text(this.score);
+    if(this.score > this.bestscore){
+      this.bestscore = this.score
+      d3.select(".high").select("span").text(this.bestscore);
+    }
   }
 
 
