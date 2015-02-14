@@ -1,6 +1,6 @@
 var Game = function(){
   var obj = {
-    "numOfEnemies": 5,
+    "numOfEnemies": 15,
     "bestscore":0,
     "score": 0,
     "intervalID":null,
@@ -19,11 +19,25 @@ var Game = function(){
           .style({
             'left': d3.event.pageX + 'px',
             'top': d3.event.pageY + 'px'
-          });
-      }
-    );
+          })
+          .attr('class', function(){
+            var currentX = d3.select(this).style("left").slice(0,-2);
+            if(currentX > d3.event.pageX){
+              return 'hero flipped';
+            }
+            else{
+              return 'hero';
+            }
+          })
+
+          // function (){
+          //   debugger;
+          //   var currentX = d3.select(this).style("left").slice(0,2);
+          //   console.log(currentX);
+          //   return true;
+      })
     this.handlehit = this.handlehitFactory(this);
-    intervalID = setInterval(this.gameTick.bind(this),950);
+    intervalID = setInterval(this.gameTick.bind(this),2000);
     d3.timer(this.detectCollisions.bind(this));
   }
 
@@ -98,14 +112,11 @@ var Game = function(){
     return function(){
       var currentTime = Date.now();
       if(currentTime - lastTime < 500){
-        console.log(currentTime - lastTime)
         return;
 
       } else {
         context.score = 0;
         context.collisions++;
-        console.log(context.score);
-        console.log(context.collisions);
         d3.select(".current").select("span").text("0");
         d3.select(".collisions").select("span").text(context.collisions);
         lastTime = currentTime;
@@ -116,7 +127,7 @@ var Game = function(){
 
 
   obj.detectHit = function(hero, enemy) {
-    var heroRadius = 15;
+    var heroRadius = 25;
     var enemyRadius = 25;
     var distance = this.getDistance(
       hero.style('left').slice(0,-2),
@@ -134,7 +145,7 @@ var Game = function(){
   obj.gameTick = function(){
     d3.selectAll(".enemy")
     .transition()
-    .duration(900)
+    .duration(1990)
     .style('left', function() {
         return this.getRandomWidth() + "px";
       }.bind(obj))
@@ -160,11 +171,5 @@ var Game = function(){
 window.game = Game();
 window.game.initalize();
 
-// new function = hitDete
-// get radius for user and enemies
-// get position for user and enemies
-// if (user radius is in same terrority as enemy radius)
-// return true
-//
 
 
