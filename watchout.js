@@ -11,7 +11,6 @@ var Game = function(){
     this.addPlayer();
     d3.select(window)
       .on('mousemove', function () {
-        console.log('dsafg');
         d3.select('.hero')
           .transition()
           .delay(0)
@@ -72,6 +71,25 @@ var Game = function(){
       }.bind(obj));
   };
 
+  obj.getDistance = function(heroX, heroY, enemyX, enemyY) {
+    var distanceX = heroX - enemyX;
+    var distanceY = heroY - enemyY;
+    var distanceSquared = Math.pow(distanceX, 2) + Math.pow(distanceY, 2);
+
+    return Math.sqrt(distanceSquared);
+  };
+
+  obj.detectHit = function(hero, enemy) {
+    var heroRadius = 15;
+    var enemyRadius = 25;
+    var distance = this.getDistance(
+      hero.style('left').slice(0,-2),
+      hero.style('top').slice(0,-2),
+      enemy.style('left').slice(0,-2),
+      enemy.style('top').slice(0,-2)
+      )
+  };
+
   obj.gameTick = function(){
     d3.selectAll(".enemy")
     .transition()
@@ -85,6 +103,7 @@ var Game = function(){
 
   }
 
+
   //returns new game element from Game().
   return obj;
 }
@@ -92,5 +111,11 @@ var Game = function(){
 window.game = Game();
 window.game.initalize();
 
+// new function = hitDete
+// get radius for user and enemies
+// get position for user and enemies
+// if (user radius is in same terrority as enemy radius)
+// return true
+//
 
 
