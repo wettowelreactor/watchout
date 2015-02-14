@@ -21,8 +21,8 @@ var Game = function(){
           });
       }
     );
-
-    intervalID = setInterval(this.gameTick.bind(this),950)
+    intervalID = setInterval(this.gameTick.bind(this),950);
+    d3.timer(this.detectCollisions.bind(this));
   }
 
   obj.getRandomWidth = function() {
@@ -79,6 +79,18 @@ var Game = function(){
     return Math.sqrt(distanceSquared);
   };
 
+  obj.detectCollisions = function() {
+    var hero = d3.select('.hero');
+    var enemies = d3.selectAll('.enemy');
+    var that = this;
+    enemies.each(function(){
+      var enemy = d3.select(this);
+      if (that.detectHit.call(that, hero, enemy)) {
+        console.log('hit!');
+      }
+    });
+  };
+
   obj.detectHit = function(hero, enemy) {
     var heroRadius = 15;
     var enemyRadius = 25;
@@ -87,7 +99,12 @@ var Game = function(){
       hero.style('top').slice(0,-2),
       enemy.style('left').slice(0,-2),
       enemy.style('top').slice(0,-2)
-      )
+    );
+    if (distance < (heroRadius + enemyRadius)) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   obj.gameTick = function(){
