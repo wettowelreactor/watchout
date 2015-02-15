@@ -4,43 +4,83 @@ var Game = function(){
     "bestscore":0,
     "score": 0,
     "intervalID":null,
-    "collisions":0
+    "collisions":0,
+    "gameStarted": false
   };
 
   obj.initalize = function(){
-    this.addEnemies();
-    this.addPlayer();
-    this.addPizza();
-    d3.select(window)
-      .on('mousemove', function () {
-        d3.select('.hero')
-          .transition()
-          .delay(0)
-          .ease('linear')
-          .style({
-            'left': d3.event.pageX + 'px',
-            'top': d3.event.pageY + 'px'
-          })
-          .attr('class', function(){
-            var currentX = d3.select(this).style("left").slice(0,-2);
-            if(currentX > d3.event.pageX){
-              return 'hero flipped';
-            }
-            else{
-              return 'hero';
-            }
-          })
 
-          // function (){
-          //   debugger;
-          //   var currentX = d3.select(this).style("left").slice(0,2);
-          //   console.log(currentX);
-          //   return true;
-      })
+    d3.select(window)
+      .on('click', this.startGame.bind(this));
+
+    this.addEnemies();
+    this.addPizza();
     this.handlehit = this.handlehitFactory(this);
-    intervalID = setInterval(this.gameTick.bind(this),2000);
-    d3.timer(this.detectCollisions.bind(this));
   }
+
+  obj.startGame = function () {
+    if (!this.gameStarted) {
+
+      d3.select(".title")
+        .transition()
+        .duration(1000)
+        .style("opacity", 0)
+
+      d3.select(window)
+        .on('mousemove', function () {
+          d3.select('.hero')
+            .transition()
+            .delay(0)
+            .ease('linear')
+            .style({
+              'left': d3.event.pageX + 'px',
+              'top': d3.event.pageY + 'px'
+            })
+            .attr('class', function(){
+              var currentX = d3.select(this).style("left").slice(0,-2);
+              if(currentX > d3.event.pageX){
+                return 'hero flipped';
+              }
+              else{
+                return 'hero';
+              }
+            })
+        })
+
+      this.addPlayer();
+      this.intervalID = setInterval(this.gameTick.bind(this),2000);
+      d3.timer(this.detectCollisions.bind(this));
+    }
+  };
+
+  obj.death = function () {
+    var hero = d3.select('.hero');
+    var x = hero.style('left');
+
+    d3.select(window)
+      .on('mousemove', null);
+
+    hero.transition()
+      .duration(3000)
+      .attr('class', 'hero death')
+      .ease('linear')
+      .style({
+        left: x,
+        top: -200 + 'px'
+      })
+
+      d3.select(".title")
+        .transition()
+        .duration(1000)
+        .style("opacity", 1)
+  };
+
+  obj.stopGame = function () {
+    clearInterval(this.intervalID);
+    this.death()
+    this.gameStarted = false;
+    //
+  };
 
   obj.getRandomWidth = function() {
     var width = (Math.random() * window.innerWidth) - 50;
@@ -55,8 +95,17 @@ var Game = function(){
   };
 
   obj.addPlayer = function() {
+    var that = this;
+
     d3.select("body").selectAll(".hero")
       .data(["hero"])
+      .attr('class', 'hero')
+      .style('left', function() {
+        return this.getRandomWidth() + "px";
+      }.bind(obj))
+      .style('top', function() {
+        return this.getRandomHeight() + "px";
+      }.bind(obj))
       .enter()
       .append('div')
       .attr('class', 'hero')
@@ -188,6 +237,8 @@ var Game = function(){
           .style('background-image', "url('nightmare.png')")
           .transition()
           .style('background-image', "url('background.gif')")
+        this.stopGame();
+        return false;
       }
     }
 
@@ -230,12 +281,12 @@ var Game = function(){
 window.game = Game();
 window.game.initalize();
 
-//Game starts if you hit spacebar
-//looks for click -- run init
-//do not run init twice
+// title screen
+// event listener for click
 //
 //
-
+//on enemy hit
+//stop game and return false
 
 
 

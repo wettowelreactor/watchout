@@ -1,3 +1,4 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:900);
 /* your beautiful css styling goes here! */
 
 /* Note: an asteroid image is included in this repo.
@@ -8,6 +9,17 @@ Feel free to use it if you like. */
   background-size: 50px;
   background-repeat: no-repeat;
   position: fixed;
+}
+
+.title{
+  height:300px;
+  width:90%;
+  position: fixed;
+  top: 35%;
+  left: 35%;
+  font-size:70px;
+  font-family: 'Lato', sans-serif;
+
 }
 
 .hero {background-image : url(hero.gif);
@@ -35,6 +47,15 @@ Feel free to use it if you like. */
   transform: scaleX(-1);
   filter: FlipH;
   -ms-filter: "FlipH";
+}
+
+.death {
+  -moz-transform: scaleY(-1);
+  -o-transform: scaleY(-1);
+  -webkit-transform: scaleY(-1);
+  transform: scaleY(-1);
+  filter: FlipV;
+  -ms-filter: "FlipV";
 }
 
 html{
