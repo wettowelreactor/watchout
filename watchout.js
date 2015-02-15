@@ -231,8 +231,8 @@ var Game = function(){
         lastTime = currentTime;
         d3.select('html')
           .transition()
-          .duration(50)
-          .style('background-image', "url('nightmare.png')")
+          .duration(100)
+          .style('background-image', "url('nightmare.jpg')")
           .transition()
           .style('background-image', "url('background.gif')")
         this.stopGame();
