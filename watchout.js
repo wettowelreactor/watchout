@@ -54,6 +54,7 @@ var Game = function(){
   };
 
   obj.death = function () {
+    d3.select(".deathsound")[0][0].play();
     var hero = d3.select('.hero');
     var x = hero.style('left');
 
@@ -208,6 +209,8 @@ var Game = function(){
 
   obj.updateScore = function(){
     this.score++;
+
+    d3.select(".powerup")[0][0].play();
     d3.select(".current").select("span").text(this.score);
     if(this.score > this.bestscore){
       this.bestscore = this.score
