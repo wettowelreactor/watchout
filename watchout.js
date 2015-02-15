@@ -95,25 +95,23 @@ var Game = function(){
   };
 
   obj.addPlayer = function() {
-    var that = this;
-
     d3.select("body").selectAll(".hero")
       .data(["hero"])
       .attr('class', 'hero')
       .style('left', function() {
-        return this.getRandomWidth() + "px";
+        return event.pageX + "px";
       }.bind(obj))
       .style('top', function() {
-        return this.getRandomHeight() + "px";
+        return event.pageY + "px";
       }.bind(obj))
       .enter()
       .append('div')
       .attr('class', 'hero')
       .style('left', function() {
-        return this.getRandomWidth() + "px";
+        return event.pageX + "px";
       }.bind(obj))
       .style('top', function() {
-        return this.getRandomHeight() + "px";
+        return event.pageY + "px";
       }.bind(obj));
   };
 

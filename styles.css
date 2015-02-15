@@ -3,6 +3,16 @@
 
 /* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
+.scoreboard{
+  width:10%;
+  color:black;
+  padding:20px;
+  border:2px dashed;
+  border-radius:5px;
+  background:white;
+  opacity:0.3;
+}
+
 .enemy {background-image : url(enemy.gif);
   height: 50px;
   width: 50px;
